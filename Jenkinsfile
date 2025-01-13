@@ -9,7 +9,7 @@ pipeline {
             steps {
                 script {
                     docker.image('python:3.10-alpine').inside {
-                        sh 'pip install py_compile' //Pastikan py_compile terinstall
+                        sh 'pip install py_compile' //saya pastikan dulu bahwa py_compile terinstall
                         sh 'python -m py_compile sources/add2vals.py sources/calc.py'
                     }
                 }
@@ -19,16 +19,12 @@ pipeline {
             steps {
                 script {
                     docker.image('python:3.10-alpine').inside {
-                        sh 'pip install pytest' //Pastikan pytest terinstall
+                        sh 'pip install pytest' //saya pastikan juga bahwa pytest terinstall
                         sh 'pytest --verbose --junit-xml test-reports/results.xml sources/test_calc.py'
                     }
                 }
             }
-            post {
-                always {
-                    junit 'test-reports/results.xml'
-                }
-            }
+            junit 'test-reports/results.xml'
         }
         stage('Deliver') {
             steps {
